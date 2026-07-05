@@ -8,5 +8,5 @@ dependencies = [
     "django-extensions>=3.2.3",
     "django-tailwind>=4.5.0",
     "sqlparse>=0.5.2",
-    "tzdata>=2024.2",
+    "tzdata>=2024.2"
 ]
