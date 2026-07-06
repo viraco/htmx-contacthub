@@ -1,13 +1,18 @@
+from urllib import response
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.db.models import Q
+from contacts.forms import ContactForm
 
 
 # Create your views here.
 @login_required
 def index(request):
     contacts = request.user.contacts.all().order_by('-created_at')
-    context = {'contacts': contacts}
+    context = {'contacts': contacts,
+               'form': ContactForm()}
     return render(request, 'contacts.html', context)
 
 
@@ -20,4 +25,27 @@ def search_contacts(request):
     ).order_by('-created_at')
     context = {'contacts': contacts}
 
-    return render(request, 'partials/contact-list.html', {"contacts": contacts})
+    response = render(request, 'partials/contact-list.html', {"contacts": contacts})
+    return response
+
+
+@login_required
+@require_http_methods(['POST'])
+def create_contact(request):
+    form = ContactForm(request.POST, initial={'user': request.user})
+    if form.is_valid():
+        contact = form.save(commit=False)
+        contact.user = request.user
+        contact.save()
+        context = {
+            "contact": contact
+        }
+        response = render(request, 'partials/contact-row.html', context)
+        response['HX-Trigger'] = 'contact-create-success'
+        return response
+    else:
+        response = render(request, 'partials/add-contact-modal.html', {'form': form})
+        response['HX-Retarget'] = '#contact_modal'
+        response['HX-ReSwap'] = 'outerHTML'
+        response['HX-Trigger-After-Settle'] = 'contact-create-error'
+        return response
