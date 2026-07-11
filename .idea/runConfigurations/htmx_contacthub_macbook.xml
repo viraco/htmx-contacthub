@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="htmx-contacthub" type="Python.DjangoServer" factoryName="Django server">
+  <configuration default="false" name="htmx-contacthub-macbook" type="Python.DjangoServer" factoryName="Django server">
     <module name="htmx-contacthub" />
     <option name="ENV_FILES" value="$USER_HOME$/Library/Application Support/uv/python/cpython-3.14.3-macos-aarch64-none/bin/python3.14" />
     <option name="INTERPRETER_OPTIONS" value="" />
